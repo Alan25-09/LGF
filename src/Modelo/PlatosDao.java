@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class PlatosDao {
 
@@ -35,6 +36,34 @@ public class PlatosDao {
             }
         }
     }
+
+   public List<Platos> Mostrar() {
+    List<Platos> Lista = new ArrayList<>();
+    String sql = "SELECT * FROM platos";
+    con = cn.getConnection();
+    try {
+        ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            Platos pl = new Platos();
+            pl.setId(rs.getInt("id"));
+            pl.setNombre(rs.getString("nombre"));
+            pl.setPrecio(rs.getDouble("precio"));
+            Lista.add(pl);
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error en la conexión: " + e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cerrar la conexión: " + e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    return Lista;
+}
 
     public List Listar(String valor, String fecha) {
         List<Platos> Lista = new ArrayList();

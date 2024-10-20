@@ -1379,11 +1379,14 @@ public final class Sistema extends javax.swing.JFrame {
         // TODO add your handling code here:
         int fila = TablePedidos.rowAtPoint(evt.getPoint());
         int id_pedido = Integer.parseInt(TablePedidos.getValueAt(fila, 0).toString());
+        int estado= pedDao.EstatusPedido(id_pedido);
         LimpiarTable();
         verPedido(id_pedido);
         verPedidoDetalle(id_pedido);
         jTabbedPane1.setSelectedIndex(4);
-        btnFinalizar.setEnabled(false);
+        if(estado==1 ){ 
+        btnFinalizar.setEnabled(false);}
+        else{btnFinalizar.setEnabled(true); }
         txtIdHistorialPedido.setText(""+id_pedido);
     }//GEN-LAST:event_TablePedidosMouseClicked
 
@@ -1941,7 +1944,8 @@ public final class Sistema extends javax.swing.JFrame {
 
     // platos
     private void ListarPlatos(JTable tabla) {
-        List<Platos> Listar = plaDao.Listar(txtBuscarPlato.getText(), fechaFormato);
+        //List<Platos> Listar = plaDao.Listar(txtBuscarPlato.getText(), fechaFormato);
+        List<Platos> Listar = plaDao.Mostrar();
         modelo = (DefaultTableModel) tabla.getModel();
         Object[] ob = new Object[3];
         for (int i = 0; i < Listar.size(); i++) {
