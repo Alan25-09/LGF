@@ -68,6 +68,28 @@ public class PedidosDao {
         return id_pedido;
     }
     
+    public int EstatusPedido(int id_pedido){
+        int estatus= 0;
+        String sql = "SELECT * FROM pedidos WHERE id=? ";
+        try {
+            con= cn.getConnection();
+            ps= con.prepareStatement(sql);
+            ps.setInt(1, id_pedido);
+            rs= ps.executeQuery();
+            
+             if (rs.next()) {  // Verificamos si hay resultados
+            String estado = rs.getString("estado");  // Obtenemos el valor del campo 'estado'
+            if ("PENDIENTE".equalsIgnoreCase(estado)) {
+                estatus = 0;  // Si el estado es "pendiente", asignamos 0
+            } else if ("FINALIZADO".equalsIgnoreCase(estado)) {
+                estatus = 1;  // Si el estado es "finalizado", asignamos 1
+            }
+        }
+        } catch (SQLException e) {
+        }
+        return estatus;
+    }
+    
     public int RegistrarPedido(Pedidos ped){
         String sql = "INSERT INTO pedidos (id_sala, num_mesa, total, usuario) VALUES (?,?,?,?)";
         try {
